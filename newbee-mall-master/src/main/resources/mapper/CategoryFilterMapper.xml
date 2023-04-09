@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ltd.newbee.mall.dao.CategoryFilterMapper">
+    <resultMap id="CategoryResult" type="ltd.newbee.mall.entity.CategoryFilter">
+        <id column="category_id" property="categoryId" />
+        <result column="category_name" property="categoryName" />
+        <result column="category_image" property="categoryImage" />
+    </resultMap>
+
+    <sql id="CategoryTable">
+        category_table
+    </sql>
+
+    <sql id="HotelCategoryTable">
+        hotel_category
+    </sql>
+
+    <select id="findCategoriesByHotelIds" resultMap="CategoryResult">
+        SELECT DISTINCT ct.category_id, ct.category_name, ct.category_image
+        FROM
+        <include refid="HotelCategoryTable" /> hc
+        JOIN
+        <include refid="CategoryTable" /> ct
+        ON hc.category_id = ct.category_id
+        WHERE hc.hotel_id IN
+        <foreach item="item" index="index" collection="hotelIdList" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+</mapper>

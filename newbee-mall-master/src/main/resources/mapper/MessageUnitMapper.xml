@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ltd.newbee.mall.dao.MessageUnitMapper">
+
+  <!-- 查询用户消息 -->
+  <select id="findMessagesByUserId" resultMap="messageUnitResult">
+    SELECT um.user_id, um.owner_id, ui.user_name, oi.owner_name,
+           ui.user_image, oi.owner_image, um.user_message, um.owner_message, um.message_time
+    FROM user_message um
+    INNER JOIN user_info ui ON um.user_id = ui.user_id
+    INNER JOIN owner_info oi ON um.owner_id = oi.owner_id
+    WHERE um.user_id = #{user_id}
+    ORDER BY um.message_time
+  </select>
+
+  <!-- 查询房东消息 -->
+  <select id="findMessagesByOwnerId" resultMap="messageUnitResult">
+    SELECT um.user_id, um.owner_id, ui.user_name, oi.owner_name,
+           ui.user_image, oi.owner_image, um.user_message, um.owner_message, um.message_time
+    FROM user_message um
+    INNER JOIN user_info ui ON um.user_id = ui.user_id
+    INNER JOIN owner_info oi ON um.owner_id = oi.owner_id
+    WHERE um.owner_id = #{owner_id}
+    ORDER BY um.message_time
+  </select>
+
+  <!-- 插入用户消息 -->
+  <insert id="insertUserMessage">
+    INSERT INTO user_message (user_id, owner_id, user_message, message_time)
+    VALUES (#{user_id}, #{owner_id}, #{user_message},  NOW())
+  </insert>
+
+  <!-- 插入房东消息 -->
+  <insert id="insertOwnerMessage">
+    INSERT INTO user_message (user_id, owner_id, owner_message, message_time)
+    VALUES (#{user_id}, #{owner_id}, #{owner_message},  NOW())
+  </insert>
+
+  <resultMap id="messageUnitResult" type="ltd.newbee.mall.entity.MessageUnit">
+    <result property="user_id" column="user_id" />
+    <result property="owner_id" column="owner_id" />
+    <result property="user_name" column="user_name" />
+    <result property="owner_name" column="owner_name" />
+    <result property="user_image" column="user_image" />
+    <result property="owner_image" column="owner_image" />
+    <result property="user_message" column="user_message" />
+    <result property="owner_message" column="owner_message" />
+    <result property="message_time" column="message_time" />
+  </resultMap>
+
+</mapper>

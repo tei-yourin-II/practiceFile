@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ltd.newbee.mall.dao.BookingInfoMapper">
+
+  <!-- 查询booking信息、user_address以及hotel_rule -->
+  <select id="findBookingInfoByUserId" resultMap="bookingInfoResultMap">
+    SELECT ab.*, ui.user_address, hri.hotel_rule
+    FROM air_booking ab
+    INNER JOIN user_info ui ON ab.user_id = ui.user_id
+    INNER JOIN hotel_room_information hri ON ab.hotel_id = hri.hotel_id
+    WHERE ab.user_id = #{user_id}
+  </select>
+
+  <!-- 添加booking记录 -->
+  <insert id="insertBooking">
+    INSERT INTO air_booking (hotel_id, room_id, order_id, user_id, check_in_date, check_out_date, user_name, adult_num, children_num, infant_num, pet_num)
+    VALUES (#{hotel_id}, #{room_id}, #{order_id}, #{user_id}, #{check_in_date, jdbcType=DATE}, #{check_out_date, jdbcType=DATE}, #{user_name}, #{adult_num}, #{children_num}, #{infant_num}, #{pet_num})
+  </insert>
+
+  <!-- 删除booking记录 -->
+  <delete id="deleteBooking">
+    DELETE FROM air_booking
+    WHERE hotel_id = #{hotel_id}
+      AND room_id = #{room_id}
+      AND order_id = #{order_id}
+      AND user_id = #{user_id}
+      AND check_in_date = #{check_in_date, jdbcType=DATE}
+      AND check_out_date = #{check_out_date, jdbcType=DATE}
+      AND user_name = #{user_name}
+      AND adult_num = #{adult_num}
+      AND children_num = #{children_num}
+      AND infant_num = #{infant_num}
+      AND pet_num = #{pet_num}
+      AND customer_total_num = #{customer_total_num}
+  </delete>
+
+  <!-- 更新booking记录 -->
+  <update id="updateBooking">
+    UPDATE air_booking
+    SET check_in_date = #{check_in_date, jdbcType=DATE},
+        check_out_date = #{check_out_date, jdbcType=DATE},
+        user_name = #{user_name},
+        adult_num = #{adult_num},
+        children_num = #{children_num},
+        infant_num = #{infant_num},
+        pet_num = #{pet_num},
+        customer_total_num = #{customer_total_num}
+    WHERE hotel_id = #{hotel_id}
+      AND room_id = #{room_id}
+      AND order_id = #{order_id}
+      AND user_id = #{user_id}
+  </update>
+  
+    <!-- 定义resultMap用于处理查询结果 -->
+  <resultMap id="bookingInfoResultMap" type="ltd.newbee.mall.entity.BookingInfo">
+    <id property="user_id" column="user_id" />
+    <result property="hotel_id" column="hotel_id" />
+    <result property="room_id" column="room_id" />
+    <result property="order_id" column="order_id" />
+    <result property="check_in_date" column="check_in_date" jdbcType="DATE" />
+    <result property="check_out_date" column="check_out_date" jdbcType="DATE" />
+    <result property="user_name" column="user_name" />
+    <result property="adult_num" column="adult_num" />
+    <result property="children_num" column="children_num" />
+    <result property="infant_num" column="infant_num" />
+    <result property="pet_num" column="pet_num" />
+    <result property="customer_total_num" column="customer_total_num" />
+    <result property="user_address" column="user_address" />
+    <result property="hotel_rule" column="hotel_rule" />
+  </resultMap>
+
+</mapper>
+  

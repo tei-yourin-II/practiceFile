@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ltd.newbee.mall.dao.UserNotificationMapper">
+
+  <!-- 插入 user_notification 记录 -->
+  <insert id="insertUserNotification" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO user_notification (user_id, notification_title, notification_from, notification_content, notification_status, notification_time)
+    VALUES (#{user_id}, #{notification_title}, #{notification_from}, #{notification_content}, #{notification_status, jdbcType=BOOLEAN}, #{notification_time, jdbcType=TIMESTAMP})
+  </insert>
+
+  <!-- 更新 user_notification 记录的 status -->
+  <update id="updateUserNotificationStatus">
+    UPDATE user_notification
+    SET notification_status = #{notification_status, jdbcType=BOOLEAN}
+    WHERE user_id = #{user_id}
+      AND notification_title = #{notification_title}
+      AND notification_from = #{notification_from}
+      AND notification_content = #{notification_content}
+  </update>
+
+  <!-- 删除 user_notification 记录 -->
+  <delete id="deleteUserNotification">
+    DELETE FROM user_notification
+    WHERE user_id = #{user_id}
+      AND notification_title = #{notification_title}
+      AND notification_from = #{notification_from}
+      AND notification_content = #{notification_content}
+  </delete>
+
+  <!-- 查询 user_notification 记录 -->
+  <select id="findUserNotifications" resultType="ltd.newbee.mall.entity.UserNotification">
+    SELECT * FROM user_notification
+    WHERE user_id = #{user_id}
+      <if test="notification_title != null">
+        AND notification_title = #{notification_title}
+      </if>
+      <if test="notification_from != null">
+        AND notification_from = #{notification_from}
+      </if>
+      <if test="notification_content != null">
+        AND notification_content = #{notification_content}
+      </if>
+  </select>
+
+</mapper>
